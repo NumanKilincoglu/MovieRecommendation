@@ -93,4 +93,19 @@ body {
   width: 24px
 }
 
+#avatar-icon {
+  height: 35px;
+  width: 35px;
+}
 
+.nav-right {
+  right: 0;
+  left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.right {
+  right: 0;
+  left: auto;
+}

@@ -10,7 +10,8 @@ function getLikes($movie_id)
         $row = mysqli_fetch_assoc($result);
         mysqli_free_result($result);
         mysqli_close($conn);
-        return $row['COUNT(id)'];
+        if(isset($row['COUNT(id)'])) return $row['COUNT(id)'];
+        return 0;
     } else {
         return "Error: " . mysqli_error($conn);
     }

@@ -5,7 +5,6 @@ function getCommentCount($movie_id)
     include 'dbConnect.php';
     $sql = "SELECT COUNT(id) FROM comments WHERE movie_id = $movie_id GROUP BY movie_id";
     $result = mysqli_query($conn, $sql);
-
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         mysqli_free_result($result);
@@ -19,18 +18,13 @@ function getCommentCount($movie_id)
 
 function getAllComments($movie_id)
 {
-    include 'dbConnect.php';
-    $sql = "SELECT c.*, u.username FROM comments c, users u WHERE movie_id = $movie_id AND u.id = c.user_id";
-    $result = mysqli_query($conn, $sql);
+    $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
 
-    $reviews = array();
-
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $reviews[] = $row;
-        }
-    }
-    return $reviews;
+    $stmt = $db->prepare("SELECT comments.*, users.username FROM comments 
+                          INNER JOIN users ON comments.user_id = users.id 
+                          WHERE comments.movie_id = ?");
+    $stmt->execute([$movie_id]);
+    $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $comments;
 }
-
 ?>

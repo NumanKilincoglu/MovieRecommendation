@@ -2,12 +2,13 @@
 session_start();
 include 'dbConnect.php';
 include 'Services/MovieService.php';
-include 'Services/LikeService.php';
 include 'Services/CommentService.php';
+include 'Services/UserService.php';
+require_once('Services/LikeService.php');
 
 if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-}else{
+	$user_id = $_SESSION['user_id'];
+} else {
 	$user_id = 1;
 }
 
@@ -16,6 +17,7 @@ $movie = getMovie($movie_id);
 $likes = getLikes($movie_id);
 $comments = getAllComments($movie_id);
 $commentCount = getCommentCount($movie_id);
+
 
 ?>
 
@@ -84,12 +86,16 @@ $commentCount = getCommentCount($movie_id);
 						</p>
 					</div>
 					<div class="col-md-3">
-						<h5 class="mb-3">IMDb Point</h5>
-						<p><?php echo $movie['imdb']; ?></p>
+						<h5 class="mb-3">IMDb</h5>
+						<p>
+							<?php echo $movie['imdb']; ?>
+						</p>
 					</div>
 					<div class="col-md-3">
 						<h5 class="mb-3">Duration</h5>
-						<p><?php echo $movie['duration']; ?> minutes</p>
+						<p>
+							<?php echo $movie['duration']; ?> minutes
+						</p>
 					</div>
 					<div class="col-md-3">
 						<h5 class="mb-3">Favourites</h5>
@@ -98,20 +104,34 @@ $commentCount = getCommentCount($movie_id);
 						</p>
 					</div>
 				</div>
-				<button onclick="<?php addFavoriteMovie($user_id, $movie_id); ?>" type="button" class="btn btn-outline-warning">Favorilere Ekle
+				<?php
+				if (array_key_exists('addFav', $_POST)) {
+					addFavoriteMovie($user_id, $movie_id);
+				}
+				if (array_key_exists('sendComment', $_POST)) {
+					$commentText = $_POST['commentText'];
+					addComment($user_id, $movie_id, $commentText);
+				}
+				?>
+				<form method="post">
+					<input class="btn btn-outline-warning" type="submit" name="addFav" class="button"
+						value="Add Favorite">
 					<span class="ml-3 text-warning">
 						<img class="img-icon-detail" src="assets/icons/empty-star.png">
 					</span>
-				</button>
+					</input>
+				</form>
 				<hr>
 				<h4 class="mb-4">Comments</h4>
 				<!-- Yorum Ekleme -->
-				<form>
+				<form method="post">
 					<div class="form-group">
-						<label for="exampleFormControlTextarea1">Share your comment</label>
-						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+						<label for="text">Share your comment</label>
+						<textarea class="form-control" id="exampleFormControlTextarea1" name="commentText"
+							rows="3"></textarea>
 					</div>
-					<button type="submit" class="btn btn-primary">Send</button>
+					<input class="btn btn-primary" type="submit" name="sendComment" class="button"
+						value="Share Comment">
 				</form>
 				<hr>
 				<!-- Yorum Listeleme -->
@@ -121,18 +141,22 @@ $commentCount = getCommentCount($movie_id);
 					</div>
 					<ul class="list-group list-group-flush">
 						<?php
-						if($commentCount > 0){
+						if ($commentCount > 0) {
 							foreach ($comments as $comment) {
+								?>
+								<li class="list-group-item">
+									<p>
+										<?php echo $comment['comment'] ?>
+									</p>
+									<small class="text-muted">
+										<?php echo $comment['username'] ?> -
+										<?php echo $comment['created_at'] ?>
+									</small>
+								</li>
+								<?php
+							}
+						}
 						?>
-							<li class="list-group-item">
-								<p>
-									<?php echo $comment['comment'] ?>
-								</p>
-								<small class="text-muted"> <?php echo $comment['username'] ?> - <?php echo $comment['created_at'] ?></small>
-							</li>
-							<?php
-						}} 
-						?>	
 				</div>
 			</div>
 

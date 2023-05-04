@@ -2,6 +2,9 @@
 session_start();
 include 'dbConnect.php';
 include 'Services/MovieService.php';
+include 'Services/CommentService.php';
+include 'Services/UserService.php';
+require_once('Services/LikeService.php');
 
 if (isset($_SESSION['username']) && isset($_SESSION['avatar']) && isset($_SESSION['user_id'])) {
     $username = $_SESSION['username'];
@@ -10,9 +13,10 @@ if (isset($_SESSION['username']) && isset($_SESSION['avatar']) && isset($_SESSIO
 } else {
     $username = "Numan";
 }
+
+$user = getUserDetails(1);
 $movie_id = "";
 $_SESSION['movie_id'] = $movie_id;
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,32 +42,38 @@ $_SESSION['movie_id'] = $movie_id;
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Main Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">My Favourites</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <img src="assets/movies/<?php echo $result; ?>.jpg" alt="avatar" class="rounded-circle mr-2">
-                        <?php echo $username; ?>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">My Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Logout</a>
-                    </div>
-                </li>
-            </ul>
+        <div class="nav-right">
+            <div class="left">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Main Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">My Favourites</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="assets/avatar/<?php echo $user['avatar']; ?>.png" alt="avatar" id="avatar-icon">
+                            <?php echo $username; ?>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">My Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -153,22 +163,28 @@ $_SESSION['movie_id'] = $movie_id;
                                 <div class="movie-info">
                                     <div class="info-section">
                                         <img class="img-icon" src="assets/icons/clock.png">
-                                        <span>1.4 H</span>
+                                        <span>
+                                            <?php echo $row['duration']; ?> Minutes
+                                        </span>
                                     </div><!--screen-->
                                     <div class="info-section">
                                         <img class="img-icon" src="assets/icons/empty-star.png">
-                                        <span>12</span>
+                                        <span>
+                                            <?php echo getLikes($row['id']); ?>
+                                        </span>
                                     </div><!--row-->
                                     <div class="info-section">
                                         <img class="img-icon" src="assets/icons/comment.png">
-                                        <span>12</span>
+                                        <span>
+                                            <?php echo getCommentCount($row['id']); ?>
+                                        </span>
                                     </div><!--seat-->
                                 </div>
                                 <div class="movie-description">
                                     <?php echo $row['description']; ?>
                                 </div>
-                                <a href="movieDetails.php?movie_id=<?php echo $row['id']; ?>" class="btn btn-success">Add
-                                    to Cart</a>
+                                <a href="movieDetails.php?movie_id=<?php echo $row['id']; ?>"
+                                    class="btn btn-success mt-5">Movie Details</a>
                             </div><!--movie-content-->
                         </div><!--movie-card-->
                     </form>
@@ -177,6 +193,12 @@ $_SESSION['movie_id'] = $movie_id;
             }
             ?>
         </div>
+        <footer>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+                
+                <span class="text-white">Numan KILINCOGLU © 2023 Copyright:</span>
+            </div>
+        </footer>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
