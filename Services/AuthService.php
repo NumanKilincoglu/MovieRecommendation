@@ -1,19 +1,21 @@
 <?php
 
-function login($user_name, $password)
+
+function login($user_name, $pass)
 {
     include 'dbConnect.php';
+    $sql = "SELECT * FROM users WHERE username = '$user_name' ";
 
-    $sql = "SELECT * FROM users WHERE username = $user_name AND password = $password";
     $result = mysqli_query($conn, $sql);
-
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         mysqli_free_result($result);
         mysqli_close($conn);
-        return true;
+        if (password_verify($pass, $row['pass'])) {
+            return $row;
+        }
     } else {
-        return false;
+        return "Error: " . mysqli_error($conn);
     }
 }
 
@@ -34,25 +36,22 @@ function userNameExist($user_name)
     }
 }
 
-function register($user_name, $password, $email)
+function register($username, $passw, $email)
 {
-    include 'dbConnect.php';
+    $pdo = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $userExist = login($user_name, $pass);
-    $userNameExist = userNameExist($user_name);
-
-    if ($userExist)
-        return "User Already Exists";
-    if ($userNameExist)
-        return "Username Already Taken";
-
-    $sql = "INSERT INTO users ('username', 'password', 'email') VALUES ($user_name, $password, $email)";
-    $result = mysqli_query($conn, $sql);
-
-    if ($result) {
-        return "User Has Been Registered";
-    } else {
-        return "Error: " . mysqli_error($conn);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (username, email, pass) VALUES (:username, :email, :passw)");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':passw', $passw);
+        $stmt->execute();
+        return true;
+    } catch (PDOException $e) {
+        echo "Record Error: " . $e->getMessage();
+        return false;
     }
+
 }
 ?>

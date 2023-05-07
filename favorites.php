@@ -1,10 +1,11 @@
 <?php
-session_start();
-include 'dbConnect.php';
+require_once 'dbConnect.php';
+require_once 'Services/UserService.php';
 include 'Services/MovieService.php';
 include 'Services/CommentService.php';
-include 'Services/UserService.php';
 require_once('Services/LikeService.php');
+
+session_start();
 
 if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id']) {
     $user_name = $_SESSION['username'];
@@ -12,15 +13,11 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
     $avatar = $_SESSION['avatar'];
 }
 
-$movies = getAllMovies();
-
-if (isset($_GET['query'])) {
-    $param = $_GET['query'];
-    $movies = getMovieByParam($param);
+if (isset($_GET['movie_id'])) {
+    deleteFavoriteMovies($user_id, $_GET['movie_id']);
 }
 
-$movie_id = "";
-$_SESSION['movie_id'] = $movie_id;
+$favorite_movies = getFavoriteMovies($user_id);
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,6 +33,7 @@ $_SESSION['movie_id'] = $movie_id;
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/card.css">
+    <link rel="stylesheet" href="styles/favorites.css">
     <link rel="stylesheet" href="styles/footer.css">
 </head>
 
@@ -78,64 +76,14 @@ $_SESSION['movie_id'] = $movie_id;
         </div>
     </nav>
 
-    <div class="container">
-        <h1 class="my-5 text-center text-white">Movie App</h1>
-        <div class="row">
-            <div class="col-md-6 mx-auto">
-                <form action="main.php" method="get">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Movie Name or Category" name="query">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="filter-bar">
-            <div class="filter-section">
-                <label class="filter-label" for="release-date">Release Date </label>
-                <input type="date" id="release-date" name="release-date">
-            </div>
-            <div class="filter-section">
-                <label class="filter-label" for="imdb-rating">IMDb:</label>
-                <select id="imdb-rating" name="imdb-rating">
-                    <option value="0">All</option>
-                    <option value="7">7.0 +</option>
-                    <option value="8">8.0 +</option>
-                    <option value="9">9.0 +</option>
-                </select>
-            </div>
-            <div class="filter-section">
-                <label class="filter-label" for="comment-count">Comments </label>
-                <select id="comment-count" name="comment-count">
-                    <option value="0">All</option>
-                    <option value="50">50 +</option>
-                    <option value="100">100 +</option>
-                    <option value="500">500 +</option>
-                </select>
-            </div>
-            <div class="filter-section">
-                <label class="filter-label" for="favorite-count">Favorites</label>
-                <select id="favorite-count" name="favorite-count">
-                    <option value="0">All</option>
-                    <option value="50">50 +</option>
-                    <option value="100">100 +</option>
-                    <option value="500">500 +</option>
-                </select>
-            </div>
-            <div class="filter-section">
-                <button type="button" class="btn btn-primary">Filter</button>
-            </div>
-        </div>
-
+    <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="my-4 text-white">Latest Movies</h3>
+                <h2 class="text-center text-white mb-5 mt-3">My Favorite Movies</h2>
             </div>
         </div>
         <div class="row">
-            <?php foreach ($movies as $movie): ?>
+            <?php foreach ($favorite_movies as $movie): ?>
                 <div class="col-md-4 mb-4">
                     <div class="movie-card" style="">
                         <div class="movie-header"
@@ -182,6 +130,13 @@ $_SESSION['movie_id'] = $movie_id;
                             <a href="movieDetails.php?movie_id=<?php echo $movie['id']; ?>"
                                 class="btn btn-success mt-5">Movie
                                 Details</a>
+                            <form method="post">
+                                <div class="movie-actions mt-3">
+                                    <a class="remove-favorite btn btn-danger"
+                                        href="favorites.php?movie_id=<?php echo $movie['id']; ?>">Remove From
+                                        Favorites</a>
+                                </div>
+                            </form>
                         </div><!--movie-content-->
                     </div><!--movie-card-->
                 </div>
@@ -212,12 +167,12 @@ $_SESSION['movie_id'] = $movie_id;
         </ul>
         <h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
     </footer>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-        </script>
     <script src="script.js"></script>
 </body>
 

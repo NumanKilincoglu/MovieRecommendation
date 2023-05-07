@@ -10,7 +10,10 @@ function getUserDetails($user_id)
     $row = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     mysqli_close($conn);
-    return $row;
+    if (isset($row['username'])){
+      return $row;
+    }
+    return "--";
   } else {
     return "Error: " . mysqli_error($conn);
   }
@@ -19,17 +22,14 @@ function getUserDetails($user_id)
 function getFavoriteMovies($user_id)
 {
   include 'dbConnect.php';
-  $sql = "SELECT * FROM favorites WHERE user_id = $user_id ";
-  $result = mysqli_query($conn, $sql);
+  $sql = "SELECT * FROM favorites f, movies m WHERE user_id = $user_id AND m.id = f.movie_id";
 
-  if ($result) {
-    $row = mysqli_fetch_assoc($result);
-    mysqli_free_result($result);
-    mysqli_close($conn);
-    return $row;
-  } else {
-    return "Error: " . mysqli_error($conn);
-  }
+  $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
+
+  $stmt = $db->prepare("SELECT * FROM favorites f, movies m WHERE user_id = ? AND m.id = f.movie_id");
+  $stmt->execute([$user_id]);
+  $favs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $favs;
 }
 
 function addFavoriteMovie($user_id, $movie_id)
@@ -46,6 +46,19 @@ function addFavoriteMovie($user_id, $movie_id)
   }
 }
 
+function deleteFavoriteMovies($user_id, $movie_id)
+{
+  include 'dbConnect.php';
+  $sql = "DELETE FROM favorites WHERE user_id = $user_id AND movie_id = $movie_id;";
+
+  if ($conn->query($sql)) {
+    $conn->close();
+    return true;
+  } else {
+    $conn->close();
+    return false;
+  }
+}
 
 function addComment($user_id, $movie_id, $text)
 {

@@ -14,6 +14,7 @@ function getMovie($movie_id)
     $row = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     mysqli_close($conn);
+
     return $row;
   } else {
     return "Error: " . mysqli_error($conn);
@@ -24,17 +25,28 @@ function getAllMovies()
 {
   include 'dbConnect.php';
 
-  $sql = "SELECT * FROM movies";
-  $result = mysqli_query($conn, $sql);
+  $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
 
-  if ($result) {
-    $row = mysqli_fetch_assoc($result);
-    mysqli_free_result($result);
-    mysqli_close($conn);
-    return $row;
-  } else {
-    return "Error: " . mysqli_error($conn);
-  }
+  $stmt = $db->prepare("SELECT * FROM movies");
+  $stmt->execute();
+  $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $movies;
+}
+
+function getMovieByParam($query)
+{
+  $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
+  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $sql = "SELECT * FROM movies WHERE title LIKE :query OR genre LIKE :query";
+  $stmt = $db->prepare($sql);
+
+  // bind parameters and execute query
+  $stmt->bindValue(':query', '%' . $query . '%');
+  $stmt->execute();
+
+  // fetch results
+  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $results;
 }
 
 function addMovie($user_id, $movie_id)
