@@ -63,6 +63,16 @@ function addMovie($user_id, $movie_id)
   }
 }
 
+function getMovieByFilter($query)
+{
+  $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
+  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $stmt = $db->prepare($query);
+  $stmt->execute();
+  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $results;
+}
+
 
 function deleteMovie($movie_id)
 {

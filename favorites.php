@@ -66,7 +66,7 @@ $favorite_movies = getFavoriteMovies($user_id);
                             <?php echo $user_name; ?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">My Profile</a>
+                            <a class="dropdown-item" href="profile.php">My Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="utils/logout.php">Logout</a>
                         </div>

@@ -10,12 +10,71 @@ function getUserDetails($user_id)
     $row = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     mysqli_close($conn);
-    if (isset($row['username'])){
+    if (isset($row['username'])) {
       return $row;
     }
     return "--";
   } else {
     return "Error: " . mysqli_error($conn);
+  }
+}
+
+function getCommentCountUser($user_id)
+{
+  include 'dbConnect.php';
+  $sql = "SELECT COUNT(id) FROM comments WHERE user_id = $user_id GROUP BY user_id";
+  $result = mysqli_query($conn, $sql);
+  if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    mysqli_close($conn);
+    if (isset($row['COUNT(id)']))
+      return $row['COUNT(id)'];
+    return 0;
+  } else {
+    return 0;
+  }
+}
+
+function getLikeCountUser($user_id)
+{
+  include 'dbConnect.php';
+  $sql = "SELECT COUNT(id) FROM favorites WHERE user_id = $user_id GROUP BY user_id";
+  $result = mysqli_query($conn, $sql);
+  if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    mysqli_close($conn);
+    if (isset($row['COUNT(id)']))
+      return $row['COUNT(id)'];
+    return 0;
+  } else {
+    return 0;
+  }
+}
+
+function getMaxComment($user_id)
+{
+  include 'dbConnect.php';
+  $sql = "SELECT movies.title, COUNT(*) AS comment_count
+    FROM comments
+    JOIN movies ON comments.id = movies.id
+    WHERE comments.user_id = 2
+    GROUP BY movies.title
+    ORDER BY comment_count DESC
+    LIMIT 1";
+
+  $result = mysqli_query($conn, $sql);
+
+  if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    mysqli_close($conn);
+    if (isset($row['title']))
+      return $row['title'];
+    return 0;
+  } else {
+    return 0;
   }
 }
 

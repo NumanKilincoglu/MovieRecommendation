@@ -65,7 +65,7 @@ $commentCount = getCommentCount($movie_id);
 							<?php echo $user_name; ?>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-							<a class="dropdown-item" href="#">My Profile</a>
+							<a class="dropdown-item" href="profile.php">My Profile</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="utils/logout.php">Logout</a>
 						</div>
@@ -205,6 +205,8 @@ $commentCount = getCommentCount($movie_id);
 		<h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
 	</footer>
 	<!-- JavaScript -->
+	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi4jq7Y"
 		crossorigin="anonymous"></script>
