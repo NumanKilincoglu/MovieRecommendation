@@ -1,19 +1,28 @@
-const removeFavoriteButtons = document.querySelectorAll('.remove-favorite');
 
-removeFavoriteButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        const movieId = button.dataset.movieId;
-        var xhttp = new XMLHttpRequest();
-        var functionName = "deleteFavoriteMovies";
-        var parameters = "user_id=1&movie_id=5";
-        var url = "Services/UserService.php?function=" + functionName + "&" + parameters;
-        
-        xhttp.open("GET", url, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {console.log(url);
-            }
-            
-        };
+function openModal() {
+    var modal = document.getElementById("edit-about-me-modal");
+    modal.style.display = "block";
+    console.log("burda");
+}
+
+function closeModal() {
+    document.getElementById("edit-about-me-modal").style.display = "none";
+}
+
+function saveAboutMe() {
+    var input = document.getElementById("edit-about-me").value;
+    $.ajax({
+        method: "POST",
+        url: 'save_about_me.php',
+        data: { text: input },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr);
+        }
     });
-});
+
+    console.log("Girilen değer: " + input);
+    document.getElementById("edit-about-me").value = "";
+}

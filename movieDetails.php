@@ -10,14 +10,13 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 	$user_name = $_SESSION['username'];
 	$user_id = $_SESSION['user_id'];
 	$avatar = $_SESSION['avatar'];
+	$movie_id = $_GET['movie_id'];
+	$movie = getMovie($movie_id);
+	$likes = getLikes($movie_id);
+	$comments = getAllComments($movie_id);
+	$commentCount = getCommentCount($movie_id);
+	$star_path = getMovieLikeByUser($movie_id, $user_id) ? "star" : "empty-star";
 }
-
-$movie_id = $_GET['movie_id'];
-$movie = getMovie($movie_id);
-$likes = getLikes($movie_id);
-$comments = getAllComments($movie_id);
-$commentCount = getCommentCount($movie_id);
-
 
 ?>
 
@@ -125,6 +124,7 @@ $commentCount = getCommentCount($movie_id);
 				<?php
 				if (array_key_exists('addFav', $_POST)) {
 					addFavoriteMovie($user_id, $movie_id);
+					$star_path = "star";
 				}
 				if (array_key_exists('sendComment', $_POST)) {
 					$commentText = $_POST['commentText'];
@@ -135,7 +135,7 @@ $commentCount = getCommentCount($movie_id);
 					<input class="btn btn-outline-warning" type="submit" name="addFav" class="button"
 						value="Add Favorite">
 					<span class="ml-3 text-warning">
-						<img class="img-icon-detail" src="assets/icons/empty-star.png">
+						<img class="img-icon-detail" src="assets/icons/<?php echo $star_path?>.png">
 					</span>
 					</input>
 				</form>
@@ -206,7 +206,7 @@ $commentCount = getCommentCount($movie_id);
 	</footer>
 	<!-- JavaScript -->
 	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi4jq7Y"
 		crossorigin="anonymous"></script>

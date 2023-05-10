@@ -116,10 +116,10 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                     <div class="profile-title">
                         <h2>About Me</h2>
                     </div>
-
                     <p>
                         <?php echo $user['about'] ?>
                     </p>
+
                     <hr>
                     <div class="stat-box">
                         <h5>Comment Statistics</h5>
@@ -152,6 +152,56 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                     </div>
                 </div>
             </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card my-5">
+                            <div class="card-header">
+                                <h3 class="text-center">About Me</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <p>
+                                        <?php echo $user['about'] ?>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#edit-about-me-modal">Edit</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="edit-about-me-modal" tabindex="-1" role="dialog"
+                aria-labelledby="edit-about-me-modal-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-about-me-modal-label">Edit About Me</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit-about-me">Tell us about yourself:</label>
+                                <textarea class="form-control" id="edit-about-me" rows="5"
+                                    placeholder="Write something about yourself..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                data-target="#edit-about-me-modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="save-about-me-btn" data-toggle="modal"
+                                data-target="#edit-about-me-modal" onclick="saveAboutMe()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <footer class="footer">
@@ -178,6 +228,9 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
         </ul>
         <h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
     </footer>
+    <script>
+    </script>
+    <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
