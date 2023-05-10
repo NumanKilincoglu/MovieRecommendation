@@ -1,7 +1,7 @@
 <?php
 session_start();
 header("Access-Control-Allow-Origin: *");
-include 'dbConnect.php';
+include '../dbConnect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['user_id'])) {
     $_POST["text"];

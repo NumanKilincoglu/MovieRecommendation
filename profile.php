@@ -91,8 +91,13 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                         <li class="list-group-item"><strong>Username:</strong>
                             <?php echo $user['username'] ?>
                         </li>
-                        <li class="list-group-item"><strong>Email:</strong>
-                            <?php echo $user['email'] ?>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="left col-md-8">
+                                    <strong>Email:</strong>
+                                    <?php echo $user['email'] ?>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <a href="favorites.php">
@@ -112,14 +117,6 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                             </li>
                         <?php endforeach; ?>
                     </ul>
-                    <hr>
-                    <div class="profile-title">
-                        <h2>About Me</h2>
-                    </div>
-                    <p>
-                        <?php echo $user['about'] ?>
-                    </p>
-
                     <hr>
                     <div class="stat-box">
                         <h5>Comment Statistics</h5>
@@ -155,7 +152,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2">
-                        <div class="card my-5">
+                        <div class="card my-1 rounded-4">
                             <div class="card-header">
                                 <h3 class="text-center">About Me</h3>
                             </div>
@@ -170,7 +167,6 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#edit-about-me-modal">Edit</button>
                             </div>
-
                         </div>
                     </div>
                 </div>
