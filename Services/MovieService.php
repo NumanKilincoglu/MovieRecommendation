@@ -40,11 +40,9 @@ function getMovieByParam($query)
   $sql = "SELECT * FROM movies WHERE title LIKE :query OR genre LIKE :query";
   $stmt = $db->prepare($sql);
 
-  // bind parameters and execute query
   $stmt->bindValue(':query', '%' . $query . '%');
   $stmt->execute();
 
-  // fetch results
   $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
   return $results;
 }

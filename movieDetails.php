@@ -135,13 +135,12 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 					<input class="btn btn-outline-warning" type="submit" name="addFav" class="button"
 						value="Add Favorite">
 					<span class="ml-3 text-warning">
-						<img class="img-icon-detail" src="assets/icons/<?php echo $star_path?>.png">
+						<img class="img-icon-detail" src="assets/icons/<?php echo $star_path ?>.png">
 					</span>
 					</input>
 				</form>
 				<hr class="hr-line">
 				<h4 class="mb-4 text-white">Comments</h4>
-				<!-- Yorum Ekleme -->
 				<form method="post">
 					<div class="form-group text-white">
 						<label for="text">Share your comment</label>
@@ -152,7 +151,6 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 						value="Share Comment">
 				</form>
 				<hr>
-				<!-- Comment List -->
 				<div class="card">
 					<div class="card-header">
 						Comments (
@@ -204,7 +202,6 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 		</ul>
 		<h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
 	</footer>
-	<!-- JavaScript -->
 	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

@@ -29,7 +29,7 @@
             <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button>
             </div>
             <a href="login.php" class="forgot">login</a>
-            
+
             <div class="mt-3 text-center">
                 <span class="sp">Numan KILINCOGLU © 2023</span>
             </div>
@@ -48,7 +48,6 @@ include 'Services/AuthService.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['mail'])) {
         $username = $_POST['username'];
         $pass = $_POST['password'];

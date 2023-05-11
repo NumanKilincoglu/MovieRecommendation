@@ -139,5 +139,4 @@ function addComment($user_id, $movie_id, $text)
   }
 }
 
-
 ?>
