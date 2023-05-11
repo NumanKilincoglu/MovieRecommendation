@@ -225,7 +225,7 @@ $_SESSION['movie_id'] = $movie_id;
             <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
 
         </ul>
-        <h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
+        <h5 class="text-white">Numan KILINCOGLU © 2023 | All Rights Reserved</h5>
     </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

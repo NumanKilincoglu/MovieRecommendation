@@ -58,8 +58,8 @@ function getMaxComment($user_id)
   include 'dbConnect.php';
   $sql = "SELECT movies.title, COUNT(*) AS comment_count
     FROM comments
-    JOIN movies ON comments.id = movies.id
-    WHERE comments.user_id = 2
+    JOIN movies ON comments.movie_id = movies.id
+    WHERE comments.user_id = $user_id
     GROUP BY movies.title
     ORDER BY comment_count DESC
     LIMIT 1";
@@ -70,11 +70,12 @@ function getMaxComment($user_id)
     $row = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     mysqli_close($conn);
+
     if (isset($row['title']))
       return $row['title'];
-    return 0;
+    return "Not Found";
   } else {
-    return 0;
+    return "Not Found";
   }
 }
 
@@ -124,6 +125,7 @@ function addComment($user_id, $movie_id, $text)
   include 'dbConnect.php';
   $db = new PDO("mysql:host=localhost;dbname=MovieProject", "root", "");
   $movie_id = intval($movie_id);
+  $user_id = intval($user_id);
   $datetime = date_create()->format('Y-m-d H:i:s');
   $stmt = $db->prepare("INSERT INTO comments (user_id, movie_id, comment, created_at) VALUES (?, ?, ?, ?)");
 

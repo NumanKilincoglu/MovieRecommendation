@@ -201,7 +201,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 			<li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
 
 		</ul>
-		<h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
+		<h5 class="text-white">Numan KILINCOGLU © 2023 | All Rights Reserved</h5>
 	</footer>
 	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

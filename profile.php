@@ -86,7 +86,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
                     <hr>
                     <ul class="list-group">
                         <li class="list-group-item"><strong>Name:</strong>
-                            <?php echo $user['name'] ?>
+                            <?php echo $user['first_name'] ?>
                         </li>
                         <li class="list-group-item"><strong>Username:</strong>
                             <?php echo $user['username'] ?>
@@ -222,7 +222,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
             <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
 
         </ul>
-        <h5 class="text-white">2023 Numan KILINCOGLU | All Rights Reserved</h5>
+		<h5 class="text-white">Numan KILINCOGLU 2023 | All Rights Reserved</h5>
     </footer>
     <script>
     </script>

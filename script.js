@@ -11,7 +11,5 @@ function saveAboutMe() {
             console.error(xhr);
         }
     });
-
-    console.log("Girilen değer: " + input);
     document.getElementById("edit-about-me").value = "";
 }

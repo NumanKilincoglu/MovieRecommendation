@@ -109,19 +109,19 @@ $favorite_movies = getFavoriteMovies($user_id);
                                     <span>
                                         <?php echo $movie['duration']; ?> Minutes
                                     </span>
-                                </div><!--screen-->
+                                </div>
                                 <div class="info-section">
                                     <img class="img-icon" src="assets/icons/empty-star.png">
                                     <span>
                                         <?php echo getLikes($movie['id']); ?>
                                     </span>
-                                </div><!--row-->
+                                </div>
                                 <div class="info-section">
                                     <img class="img-icon" src="assets/icons/comment.png">
                                     <span>
                                         <?php echo getCommentCount($movie['id']); ?>
                                     </span>
-                                </div><!--seat-->
+                                </div>
                             </div>
                             <div class="movie-description">
                                 <?php echo $movie['description']; ?>
@@ -137,8 +137,8 @@ $favorite_movies = getFavoriteMovies($user_id);
                                         Favorites</a>
                                 </div>
                             </form>
-                        </div><!--movie-content-->
-                    </div><!--movie-card-->
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
