@@ -90,7 +90,7 @@ $favorite_movies = getFavoriteMovies($user_id);
                             style="background-image: url(<?php echo "assets/movies/" . $movie['image_path'] . ".jpg"; ?>)">
                             <div class="header-icon-container">
                             </div>
-                        </div><!--movie-header-->
+                        </div>
                         <div class="movie-content">
                             <div class="movie-content-header">
                                 <a href="#">

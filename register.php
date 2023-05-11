@@ -21,6 +21,9 @@
                 <input class="form-control" type="text" name="username" placeholder="Username">
             </div>
             <div class="form-group">
+                <input class="form-control" type="text" name="firstname" placeholder="First Name">
+            </div>
+            <div class="form-group">
                 <input class="form-control" type="text" name="mail" placeholder="Mail">
             </div>
             <div class="form-group">
@@ -48,14 +51,15 @@ include 'Services/AuthService.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['mail'])) {
+    if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['mail']) && isset($_POST['firstname'])) {
         $username = $_POST['username'];
         $pass = $_POST['password'];
         $mail = $_POST['mail'];
+        $first_name = $_POST['firstname'];
+        
         $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
 
-        if (register($username, $hashed_password, $mail)) {
-            $_SESSION['user_id'] = 1;
+        if (register($username, $hashed_password, $mail, $first_name)) {
             header("location: login.php");
         }
         echo 'Enter Details Correctly.';

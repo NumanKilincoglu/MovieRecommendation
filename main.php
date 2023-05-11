@@ -12,15 +12,19 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
     $avatar = $_SESSION['avatar'];
 }
 
-$movies = getAllMovies();
-
-if (isset($_GET['query'])) {
-    $param = $_GET['query'];
-    $movies = getMovieByParam($param);
+if (isset($_SESSION['query']) && $_SESSION['query'] != "") {
+    $param = $_SESSION['query'];
+    $movies = getMovieByFilter($param);
+    $_SESSION['query'] = "";
+} else if (isset($_GET['search-query'])) {
+    $movies = getMovieByParam($_GET['search-query']);
+} else {
+    $movies = getAllMovies();
 }
 
 $movie_id = "";
 $_SESSION['movie_id'] = $movie_id;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -84,7 +88,8 @@ $_SESSION['movie_id'] = $movie_id;
             <div class="col-md-6 mx-auto">
                 <form action="main.php" method="get">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Movie Name or Category" name="query">
+                        <input type="text" class="form-control" placeholder="Movie Name or Category"
+                            name="search-query">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="submit">Search</button>
                         </div>
@@ -92,8 +97,8 @@ $_SESSION['movie_id'] = $movie_id;
                 </form>
             </div>
         </div>
-        <div class="filter-bar">
-            <form method="post">
+        <div class="">
+            <form method="post" class="filter-bar">
                 <div class="filter-section">
                     <label class="filter-label" for="release-date">Release Date </label>
                     <select id="release-date" name="release-date">
@@ -130,11 +135,10 @@ $_SESSION['movie_id'] = $movie_id;
                     </select>
                 </div>
                 <div class="filter-section">
-                    <input class="btn btn-primary" type="submit" name="submit" value="Filter" />
+                    <input class="btn btn-primary" type="submit" name="filterButton" value="Filter" />
                 </div>
+            </form>
         </div>
-        </form>
-
         <div class="row">
             <div class="col-md-12">
                 <h3 class="my-4 text-white">Latest Movies</h3>
@@ -143,12 +147,12 @@ $_SESSION['movie_id'] = $movie_id;
         <div class="row">
             <?php foreach ($movies as $movie): ?>
                 <div class="col-md-4 mb-4">
-                    <div class="movie-card" style="">
+                    <div class="movie-card">
                         <div class="movie-header"
                             style="background-image: url(<?php echo "assets/movies/" . $movie['image_path'] . ".jpg"; ?>)">
                             <div class="header-icon-container">
                             </div>
-                        </div><!--movie-header-->
+                        </div>
                         <div class="movie-content">
                             <div class="movie-content-header">
                                 <a href="#">
@@ -167,29 +171,34 @@ $_SESSION['movie_id'] = $movie_id;
                                     <span>
                                         <?php echo $movie['duration']; ?> Minutes
                                     </span>
-                                </div><!--screen-->
+                                </div>
+                                <div class="info-section">
+                                    <span>
+                                        IMBD
+                                        <?php echo $movie['imdb']; ?>
+                                    </span>
+                                </div>
                                 <div class="info-section">
                                     <img class="img-icon" src="assets/icons/empty-star.png">
                                     <span>
                                         <?php echo getLikes($movie['id']); ?>
                                     </span>
-                                </div><!--row-->
+                                </div>
                                 <div class="info-section">
                                     <img class="img-icon" src="assets/icons/comment.png">
                                     <span>
                                         <?php echo getCommentCount($movie['id']); ?>
                                     </span>
-                                </div><!--seat-->
+                                </div>
                             </div>
                             <div class="movie-description">
                                 <?php echo $movie['description']; ?>
                             </div>
-
                             <a href="movieDetails.php?movie_id=<?php echo $movie['id']; ?>"
                                 class="btn btn-success mt-5">Movie
                                 Details</a>
-                        </div><!--movie-content-->
-                    </div><!--movie-card-->
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -236,45 +245,49 @@ $_SESSION['movie_id'] = $movie_id;
 
 </html>
 <?php
+if (array_key_exists('filterButton', $_POST)) {
+    $query = "SELECT * FROM movies";
 
-$query = "SELECT * FROM movies";
-
-if (isset($_POST['imdb-rating'])) {
-    $imdb_rate = $_POST['imdb-rating'];
-    $imdb_rate == "all" ? $query .= "" : $query .= " WHERE imdb >= '$imdb_rate'";
-}
-
-if (isset($_POST['comment-count'])) {
-    $comment = $_POST['comment-count'];
-    $comment == "all" ? $query .= "" : $query .= " ORDER BY (SELECT COUNT(*) FROM comments WHERE comments.movie_id = movies.id) DESC";
-}
-
-if (isset($_POST['favorite-count'])) {
-    $favorite = $_POST['favorite-count'];
-    if (strpos($query, "ORDER BY") === false) {
-        $favorite == "all" ? $query .= "" : $query .= " ORDER BY (SELECT COUNT(*) FROM favorites WHERE favorites.movie_id = movies.id) DESC";
-    } else {
-        $favorite == "all" ? $query .= "" : $query .= ", (SELECT COUNT(*) FROM favorites WHERE favorites.movie_id = movies.id) DESC";
+    if (isset($_POST['imdb-rating'])) {
+        $imdb_rate = $_POST['imdb-rating'];
+        $imdb_rate == "all" ? $query .= "" : $query .= " WHERE imdb > $imdb_rate";
     }
-}
 
-if (isset($_POST['release-date'])) {
-    $release_time = $_POST['release-date'];
+    if (isset($_POST['comment-count'])) {
+        $comment = $_POST['comment-count'];
+        $comment == "all" ? $query .= "" : $query .= " ORDER BY (SELECT COUNT(*) FROM comments WHERE comments.movie_id = movies.id) DESC";
+    }
 
-    if (strpos($query, "ORDER BY") === false) {
-        $release_time == "all" ? $query .= "" : $query .= " ORDER BY release_year DESC";
-    } else {
-        if ($release_time === "new") {
-            $release_time == "all" ? $query .= "" : $query .= ", release_year DESC";
+    if (isset($_POST['favorite-count'])) {
+        $favorite = $_POST['favorite-count'];
+        if (strpos($query, "ORDER BY") === false) {
+            $favorite == "all" ? $query .= "" : $query .= " ORDER BY (SELECT COUNT(*) FROM favorites WHERE favorites.movie_id = movies.id) DESC";
         } else {
-            $release_time == "all" ? $query .= "" : $query .= ", release_year ASC";
+            $favorite == "all" ? $query .= "" : $query .= ", (SELECT COUNT(*) FROM favorites WHERE favorites.movie_id = movies.id) DESC";
         }
     }
+
+    if (isset($_POST['release-date'])) {
+        $release_time = $_POST['release-date'];
+
+        if (strpos($query, "ORDER BY") === false) {
+            $release_time == "all" ? $query .= "" : $query .= " ORDER BY release_year DESC";
+        } else {
+            if ($release_time === "new") {
+                $release_time == "all" ? $query .= "" : $query .= ", release_year DESC";
+
+            } else {
+                $release_time == "all" ? $query .= "" : $query .= ", release_year ASC";
+                echo "release YEAR .? " . $release_time;
+            }
+        }
+    }
+
+    if (!isset($_POST['release-date']) && !isset($_POST['imdb-rating']) && !isset($_POST['comment-count']) && !isset($_POST['favorite-count'])) {
+        $query .= " ORDER BY release_year DESC, imdb DESC";
+    }
+    $_SESSION['query'] = $query;
 }
 
-if (!isset($_POST['release-date']) && !isset($_POST['imdb-rating']) && !isset($_POST['comment-count']) && !isset($_POST['favorite-count'])) {
-    $query .= " ORDER BY release_year DESC, imdb DESC";
-}
-$movies = getMovieByFilter($query);
 
 ?>

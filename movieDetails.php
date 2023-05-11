@@ -73,7 +73,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 			</div>
 		</div>
 	</nav>
-	<!-- Film Detay -->
+
 	<div class="container my-4">
 		<div class="row">
 			<div class="col-md-4">
@@ -129,6 +129,7 @@ if (isset($_SESSION['username']) && $_SESSION['avatar'] && $_SESSION['user_id'])
 				if (array_key_exists('sendComment', $_POST)) {
 					$commentText = $_POST['commentText'];
 					addComment($user_id, $movie_id, $commentText);
+					header('Location: ' . $_SERVER['REQUEST_URI']);
 				}
 				?>
 				<form method="post">

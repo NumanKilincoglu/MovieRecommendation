@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['avatar'] = $user['avatar'];
             header("location: main.php");
         } else {
-            $error = "Kullanıcı adı veya şifre boş bırakılamaz.";
+            $error = "Error";
         }
     }
 }
