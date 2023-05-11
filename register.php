@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Untitled</title>
+    <title>Movie Recommend</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="styles/login.css">
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button>
             </div>
-            <a href="login.php" class="forgot">login</a>
+            <a href="login.php" class="forgot">Login</a>
 
             <div class="mt-3 text-center">
                 <span class="sp">Numan KILINCOGLU © 2023</span>
